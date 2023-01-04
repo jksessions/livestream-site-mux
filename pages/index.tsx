@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from '@next/font/google'
+import MuxPlayer from '@mux/mux-player-react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,8 +14,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="navbar bg-base-100">
-        <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+        <a className="btn btn-ghost normal-case text-xl">Sessions Funerals</a>
       </div>
+      <article className='container mx-auto'>
+        <p className='text-center'>Hello</p>
+        <MuxPlayer />
+        <p className='text-center'>Hello</p>
+      </article>
       <footer className="footer footer-center p-4 bg-base-300 text-base-content">
         <div>
           <p>Copyright © 2023 - All right reserved by ACME Industries Ltd</p>
