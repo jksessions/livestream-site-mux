@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import MuxPlayer from '@mux/mux-player-react'
 import useSWR from 'swr'
+import { useEffect, useState } from 'react';
 import Script from 'next/script';
 
 function fetcher(url: string) {
@@ -9,10 +10,17 @@ function fetcher(url: string) {
 const title = process.env.NEXT_PUBLIC_Title
 const businessName = process.env.NEXT_PUBLIC_Footer
 
-export default function Index(): JSX.Element {
+export default function VOD(): JSX.Element {
+	const [assetId, setAssetId] = useState<string>('');
 
-	const { data } = useSWR(
-		process.env.NEXT_PUBLIC_API_URL + "live",
+	useEffect(() => {
+		const url = new URL(window.location.href);
+		const localAssetId = url.searchParams.get('id');
+		setAssetId(localAssetId as string);
+	}, [setAssetId]);
+
+	const { data, error } = useSWR(
+		process.env.NEXT_PUBLIC_API_URL + assetId,
 		fetcher
 	);
 
@@ -33,10 +41,11 @@ export default function Index(): JSX.Element {
 				<h1 className="text-xl">{title}</h1>
 			</div>
 			<article className='container mx-auto'>
-				<p className='text-center'>{data ? (data.funeral?`This is the service for ${data.name}. This service starts ${localisedDate}.`: 'There is no livestreamed funerals scheduled at this time.') : 'Fetching Data!!!'}</p>
+				<p className='text-center'>{data ? `This was the service for ${data.name}. This service started ${localisedDate}.` : 'VOD not found'}</p>
 				<MuxPlayer
-					playbackId={data ? (data.funeral?data.liveId:'') : ''}
-					streamType='live'   
+					playbackId={data ? data.assetId : ''}
+					startTime={data ? (data.startTime ? data.startTime : 0) : 0}
+					streamType='on-demand'   
 				/>
 			</article>
 			<footer className="footer footer-center p-4 bg-base-300 text-base-content">
