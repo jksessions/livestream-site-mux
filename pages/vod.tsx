@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import Head from 'next/head'
 import MuxPlayer from '@mux/mux-player-react'
 import useSWR from 'swr'
@@ -11,7 +10,7 @@ function fetcher(url: string) {
 const title = process.env.NEXT_PUBLIC_Title
 const businessName = process.env.NEXT_PUBLIC_Footer
 
-function Post() {
+export default function VOD(): JSX.Element {
 	const [assetId, setAssetId] = useState<string>('');
 
 	useEffect(() => {
@@ -21,7 +20,7 @@ function Post() {
 	}, [setAssetId]);
 
 	const { data, error } = useSWR(
-		"/api/live?id=" + assetId,
+		process.env.NEXT_PUBLIC_API_URL + assetId,
 		fetcher
 	);
 
@@ -57,5 +56,3 @@ function Post() {
 		</>
 	);
 }
-
-export default Post

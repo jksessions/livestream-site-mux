@@ -1,8 +1,6 @@
-import { useRouter } from 'next/router'
 import Head from 'next/head'
 import MuxPlayer from '@mux/mux-player-react'
 import useSWR from 'swr'
-import { useEffect, useState } from 'react';
 import Script from 'next/script';
 
 function fetcher(url: string) {
@@ -11,10 +9,10 @@ function fetcher(url: string) {
 const title = process.env.NEXT_PUBLIC_Title
 const businessName = process.env.NEXT_PUBLIC_Footer
 
-function Post() {
+export default function Index(): JSX.Element {
 
-	const { data, error } = useSWR(
-		"/api/live?id=live",
+	const { data } = useSWR(
+		process.env.NEXT_PUBLIC_API_URL + "live",
 		fetcher
 	);
 
@@ -35,7 +33,7 @@ function Post() {
 				<h1 className="text-xl">{title}</h1>
 			</div>
 			<article className='container mx-auto'>
-				<p className='text-center'>{data ? (data.funeral?`This is the service for ${data.name}. This service started ${localisedDate}.`: 'There is no livestreamed funerals scheduled at this time.') : 'Fetching Data!!!'}</p>
+				<p className='text-center'>{data ? (data.funeral?`This is the service for ${data.name}. This service starts ${localisedDate}.`: 'There is no livestreamed funerals scheduled at this time.') : 'Fetching Data!!!'}</p>
 				<MuxPlayer
 					playbackId={data ? (data.funeral?data.liveId:'') : ''}
 					streamType='live'   
@@ -49,5 +47,3 @@ function Post() {
 		</>
 	);
 }
-
-export default Post
